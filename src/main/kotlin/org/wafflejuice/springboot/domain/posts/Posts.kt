@@ -8,10 +8,18 @@ data class Posts(
     val id: Long? = null,
 
     @Column(length = 500, nullable = false)
-    val title: String,
+    var title: String,
 
     @Column(columnDefinition = "TEXT", nullable = false)
-    val content : String,
+    var content : String,
 
     val author: String
-)
+) {
+    fun update(
+        title: String,
+        content: String
+    ) {
+        this.title = title
+        this.content = content
+    }
+}
