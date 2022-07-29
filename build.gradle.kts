@@ -8,12 +8,14 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${project.extra["springBootVersion"]}")
+        classpath("org.jlleitschuh.gradle:ktlint-gradle:9.1.0")
     }
 }
 
 plugins {
     id("org.springframework.boot") version "2.7.2"
     id("io.spring.dependency-management") version "1.0.12.RELEASE"
+    id("org.jlleitschuh.gradle.ktlint") version "9.1.0"
     kotlin("jvm") version "1.6.20"
     kotlin("plugin.spring") version "1.6.20"
     kotlin("plugin.jpa") version "1.6.20"
