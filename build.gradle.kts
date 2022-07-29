@@ -34,11 +34,16 @@ dependencies {
     implementation("com.h2database:h2")
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.springframework.boot:spring-boot-starter-mustache")
 
     testImplementation(kotlin("test"))
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
+}
+
+allOpen {
+    annotation("javax.persistence.MappedSuperclass")
 }
 
 tasks.test {
