@@ -2,7 +2,6 @@ package org.wafflejuice.springboot.web
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +18,7 @@ import org.wafflejuice.springboot.domain.posts.Posts
 import org.wafflejuice.springboot.domain.posts.PostsRepository
 import org.wafflejuice.springboot.web.dto.PostsSaveRequestDto
 import org.wafflejuice.springboot.web.dto.PostsUpdateRequestDto
+import java.time.LocalDateTime
 
 @ExtendWith(SpringExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -82,5 +82,41 @@ internal class PostsApiControllerTest(
         val all = postsRepository.findAll()
         assertThat(all[0].title).isEqualTo(expectedTitle)
         assertThat(all[0].content).isEqualTo(expectedContent)
+    }
+
+    @Test
+    fun `BaseTimeEntity 등록`() {
+        //given
+        val now = LocalDateTime.of(2019, 6, 4, 0, 0, 0)
+        postsRepository.save(Posts(title = "title", content = "content", author = "author"))
+
+        //when
+        val postsList = postsRepository.findAll()
+
+        //then
+        val posts = postsList[0]
+        println("> createDate=${posts.createdDate}, modifiedDate=${posts.modifiedDate}")
+        assertThat(posts.createdDate).isAfter(now)
+    }
+
+    @Test
+    fun `BaseTimeEntity 수정`() {
+        //given
+        postsRepository.save(Posts(title = "title", content = "content", author = "author"))
+
+        val postsList = postsRepository.findAll()
+        val posts = postsList[0]
+        posts.content = "updated_content"
+        postsRepository.save(posts)
+
+        println("> createDate=${posts.createdDate}, modifiedDate=${posts.modifiedDate}") // 동일
+
+        //when
+        val updatedPostsList = postsRepository.findAll()
+
+        //then
+        val updatedPosts = updatedPostsList[0]
+        println("> createDate=${updatedPosts.createdDate}, modifiedDate=${updatedPosts.modifiedDate}") // 비동일
+        assertThat(updatedPosts.modifiedDate).isAfter(updatedPosts.createdDate)
     }
 }

@@ -1,5 +1,6 @@
 package org.wafflejuice.springboot.domain.posts
 
+import org.wafflejuice.springboot.domain.BaseTimeEntity
 import javax.persistence.*
 
 @Entity
@@ -11,10 +12,10 @@ data class Posts(
     var title: String,
 
     @Column(columnDefinition = "TEXT", nullable = false)
-    var content : String,
+    var content: String,
 
     val author: String
-) {
+) : BaseTimeEntity() {
     fun update(
         title: String,
         content: String
