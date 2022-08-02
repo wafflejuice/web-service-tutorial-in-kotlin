@@ -1,5 +1,6 @@
 package org.wafflejuice.springboot.web
 
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -22,6 +23,14 @@ class PostsApiController(
         @PathVariable id: Long,
         @RequestBody requestDto: PostsUpdateRequestDto
     ) = postsService.update(id, requestDto)
+
+    @DeleteMapping("/api/v1/posts/{id}")
+    fun delete(
+        @PathVariable id: Long
+    ): Long {
+        postsService.delete(id)
+        return id
+    }
 
     @GetMapping("/api/v1/posts/{id}")
     fun findById(
