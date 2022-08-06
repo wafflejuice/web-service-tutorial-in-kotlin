@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.wafflejuice.springboot.config.auth.LoginUser
 import org.wafflejuice.springboot.config.auth.dto.SessionUser
 import org.wafflejuice.springboot.domain.posts.PostsRepository
 import org.wafflejuice.springboot.service.posts.PostsService
@@ -15,11 +16,15 @@ class IndexController(
     val httpSession: HttpSession
 ) {
     @GetMapping("/")
-    fun index(model: Model): String {
+    fun index(
+        model: Model,
+        @LoginUser user: SessionUser?
+    ): String {
         model.addAttribute("posts", postsService.findAllDesc())
 
-        val user = httpSession.getAttribute("user") as SessionUser?
-        model.addAttribute("userName", user?.name)
+        if (user != null) {
+            model.addAttribute("userName", user.name)
+        }
 
         return "index"
     }
