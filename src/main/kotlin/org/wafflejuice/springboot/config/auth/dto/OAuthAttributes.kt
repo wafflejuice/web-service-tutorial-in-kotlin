@@ -25,6 +25,10 @@ class OAuthAttributes(
             userNameAttributeName: String,
             attributes: Map<String, Any>
         ): OAuthAttributes {
+            if (registrationId == "naver") {
+                return ofNaver("id", attributes)
+            }
+
             return ofGoogle(userNameAttributeName, attributes)
         }
 
@@ -37,6 +41,21 @@ class OAuthAttributes(
                 email = attributes["email"].toString(),
                 picture = attributes["picture"].toString(),
                 attributes = attributes,
+                nameAttributeKey = userNameAttributeName
+            )
+        }
+
+        fun ofNaver(
+            userNameAttributeName: String,
+            attributes: Map<String, Any>
+        ): OAuthAttributes {
+            val response: Map<String, Any> = attributes["response"] as Map<String, Any>
+
+            return OAuthAttributes(
+                name = response["name"] as String,
+                email = response["email"] as String,
+                picture = response["profile_image"] as String,
+                attributes = response,
                 nameAttributeKey = userNameAttributeName
             )
         }
